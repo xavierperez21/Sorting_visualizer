@@ -1,9 +1,10 @@
 import React from 'react';
-import * as sortingAlgorithms from '../sortingAlgorithms/sortingAlgorithms'
+import * as mergeSortAlgorithm from '../sortingAlgorithms/mergeSort'
+import * as bubbleSortAlgorithm from '../sortingAlgorithms/bubbleSort'
 import './SortingVisualizer.css';
 
-const ANIMATION_SPEED_MS = 2;
-const NUMBER_OF_ARRAY_BARS = 200;
+const ANIMATION_SPEED_MS = 20;
+const NUMBER_OF_ARRAY_BARS = 20;
 const PRIMARY_COLOR = 'turquoise';
 const SECONDARY_COLOR = 'red';
 
@@ -33,10 +34,13 @@ export default class SortingVisualizer extends React.Component {
         // const sortedArray = sortingAlgorithms.mergeSort(this.state.array);
 
         // console.log(arraysAreEqual(javaScriptSortedArray, sortedArray));
-        const animations = sortingAlgorithms.getMergeSortAnimations(this.state.array);
+        const animations = mergeSortAlgorithm.getMergeSortAnimations(this.state.array);
+
         for (let i = 0; i < animations.length; i++) {
             const arrayBars = document.getElementsByClassName('array-bar');
             const isColorChange = i % 3 !== 2;
+            
+            // Change color from turquoise to red and viceversa
             if (isColorChange) {
                 const [barOneIdx, barTwoIdx] = animations[i];
                 const barOneStyle = arrayBars[barOneIdx].style;
@@ -47,6 +51,8 @@ export default class SortingVisualizer extends React.Component {
                     barTwoStyle.backgroundColor = color;
                 }, i * ANIMATION_SPEED_MS);
             }
+
+            // Swaping bars
             else {
                 setTimeout(() => {
                     const [barOneIdx, newHeight] = animations[i];
@@ -65,9 +71,44 @@ export default class SortingVisualizer extends React.Component {
 
     }
 
-    bubbleSort() {
 
+    bubbleSort() {
+        // const javaScriptSortedArray = this.state.array.slice().sort((a,b) => a - b);
+        // const sortedArray = bubbleSortAlgorithm.bubbleSortTest(this.state.array, this.state.array.length);
+
+        // console.log(arraysAreEqual(javaScriptSortedArray, sortedArray));
+        const animations = bubbleSortAlgorithm.getBubbleSortAnimations(this.state.array);
+        console.log(animations);
+
+        for (let i = 0; i < animations.length; i++) {
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const isColorChange = i % 3 !== 1;
+            
+            // Change color from turquoise to red and viceversa
+            if (isColorChange) {
+                const [barOneIdx, barTwoIdx] = animations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                }, i * ANIMATION_SPEED_MS);
+            }
+
+            // Swaping bars
+            else {
+                setTimeout(() => {
+                    const [barOneIdx, newHeight, barTwoIdx, newHeight2] = animations[i];
+                    const barOneStyle = arrayBars[barOneIdx].style;
+                    const barTwoStyle = arrayBars[barTwoIdx].style;
+                    barOneStyle.height = `${newHeight}px`;
+                    barTwoStyle.height = `${newHeight2}px`;
+                }, i * ANIMATION_SPEED_MS);
+            }
+        }
     }
+
 
     // testSortingAlgorithms() {
     //     for (let i = 0; i < 100; i++) { //Simmulations

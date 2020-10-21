@@ -47,7 +47,7 @@ function mergeSortHelper (mainArray, initialIdx, endIdx, auxiliaryArray, animati
 
 
 function doMerge(mainArray, initialIdx, middleIdx, endIdx, auxiliaryArray, animations) {
-    let k = initialIdx;
+    let k = initialIdx; // Helper index to modify the mainArray
     let i = initialIdx;
     let j = middleIdx + 1;
 
