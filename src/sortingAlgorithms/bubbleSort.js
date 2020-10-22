@@ -10,7 +10,7 @@ export function getBubbleSortAnimations (array) {
     // Creating an auxiliary array to not modify the original
     const auxiliaryArray = array.slice();
 
-    bubbleSort(auxiliaryArray, n, animations, array);
+    bubbleSort(auxiliaryArray, n, animations);
 
     return animations;
 }
