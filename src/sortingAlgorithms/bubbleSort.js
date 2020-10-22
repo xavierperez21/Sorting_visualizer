@@ -31,6 +31,7 @@ function bubbleSort(auxiliaryArray, n, animations) {
                 animations.push([j, auxiliaryArray[j+1], j+1, auxiliaryArray[j]]);    // Changing height
                 [auxiliaryArray[j+1], auxiliaryArray[j]] = [auxiliaryArray[j], auxiliaryArray[j+1]];
             }
+            
             else {
                 // We don't swap anything but we have to keep the same consistency in the array animations
                 animations.push([j, auxiliaryArray[j], j+1, auxiliaryArray[j+1]]);
