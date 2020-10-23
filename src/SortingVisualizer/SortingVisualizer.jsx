@@ -1,12 +1,15 @@
 import React from 'react';
+
+import Slider from '../inputRange/Slider.jsx';
+
 import * as mergeSortAlgorithm from '../sortingAlgorithms/mergeSort';
 import * as quickSortAlgorithm from '../sortingAlgorithms/quickSort';
 import * as heapSortAlgorithm from '../sortingAlgorithms/heapSort';
 import * as bubbleSortAlgorithm from '../sortingAlgorithms/bubbleSort';
 import './SortingVisualizer.css';
 
-const ANIMATION_SPEED_MS = 20;
-const NUMBER_OF_ARRAY_BARS = 30;
+// const ANIMATION_SPEED_MS = 50;
+// const NUMBER_OF_ARRAY_BARS = 100;
 const PRIMARY_COLOR = 'turquoise';
 const SECONDARY_COLOR = 'red';
 const PIVOT_COLOR = 'purple';
@@ -17,6 +20,8 @@ export default class SortingVisualizer extends React.Component {
 
         this.state = {
             array: [],
+            numberOfBars: 50,
+            speed: 20,
         };
     }
 
@@ -24,19 +29,16 @@ export default class SortingVisualizer extends React.Component {
         this.resetArray();
     }
 
-    resetArray() {
+    resetArray(numberOfBars = 30) {
         const array = [];
-        for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
+        for (let i = 0; i < numberOfBars; i++) {
             array.push(randomIntFromInterval(5, 450));
         }
         this.setState({array});
     }
 
     mergeSort() {
-        // const javaScriptSortedArray = this.state.array.slice().sort((a,b) => a - b);
-        // const sortedArray = sortingAlgorithms.mergeSort(this.state.array);
-
-        // console.log(arraysAreEqual(javaScriptSortedArray, sortedArray));
+        this.selectingAlgorithm("merge-sort");
         const animations = mergeSortAlgorithm.getMergeSortAnimations(this.state.array);
 
         for (let i = 0; i < animations.length; i++) {
@@ -52,7 +54,7 @@ export default class SortingVisualizer extends React.Component {
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
                     barTwoStyle.backgroundColor = color;
-                }, i * ANIMATION_SPEED_MS);
+                }, i * this.state.speed);
             }
 
             // Swaping bars
@@ -61,30 +63,51 @@ export default class SortingVisualizer extends React.Component {
                     const [barOneIdx, newHeight] = animations[i];
                     const barOneStyle = arrayBars[barOneIdx].style;
                     barOneStyle.height = `${newHeight}px`;
-                }, i * ANIMATION_SPEED_MS);
+                }, i * this.state.speed);
             }
         }
     }
 
     quickSort() {
+        this.selectingAlgorithm("quick-sort");
         const animations = quickSortAlgorithm.getQuickSortAnimations(this.state.array);
         this.animateSortingAlgorithm(animations);
     }
 
+
     heapSort() {
+        this.selectingAlgorithm("heap-sort");
         const animations = heapSortAlgorithm.getHeapSortAnimations(this.state.array);
         this.animateSortingAlgorithm(animations);
     }
 
 
     bubbleSort() {
-        // const javaScriptSortedArray = this.state.array.slice().sort((a,b) => a - b);
-        // const sortedArray = bubbleSortAlgorithm.bubbleSortTest(this.state.array, this.state.array.length);
-
-        // console.log(arraysAreEqual(javaScriptSortedArray, sortedArray));
+        this.selectingAlgorithm("bubble-sort");
         const animations = bubbleSortAlgorithm.getBubbleSortAnimations(this.state.array);
         this.animateSortingAlgorithm(animations);
     }
+
+
+    selectingAlgorithm(algorithm_id) {
+        let buttons = document.getElementsByClassName("button");
+        for (let i = 0; i < buttons.length; i++) {
+            if (buttons[i].id === algorithm_id) {
+                buttons[i].style.backgroundColor = "green";
+                buttons[i].style.flex = 2;
+            }
+            else {
+                buttons[i].style.backgroundColor = "gray";
+                buttons[i].style.flex = 1;
+            }
+            buttons[i].style.pointerEvents = "none";
+        }
+        
+        let slide_bar = document.getElementById("slider");
+        slide_bar.disabled = true;
+        console.log(slide_bar)
+    }
+
 
     animateSortingAlgorithm(animations) {
         
@@ -104,7 +127,7 @@ export default class SortingVisualizer extends React.Component {
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
                     barTwoStyle.backgroundColor = PIVOT_COLOR;
-                }, i * ANIMATION_SPEED_MS);
+                }, i * this.state.speed);
             }
             else if (barState === "comparing") {
                 const [barOneIdx, barTwoIdx] = animations[i];
@@ -114,7 +137,7 @@ export default class SortingVisualizer extends React.Component {
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
                     barTwoStyle.backgroundColor = color;
-                }, i * ANIMATION_SPEED_MS);
+                }, i * this.state.speed);
             }
             else if (barState === "swap") {
                 setTimeout(() => {
@@ -123,24 +146,42 @@ export default class SortingVisualizer extends React.Component {
                     const barTwoStyle = arrayBars[barTwoIdx].style;
                     barOneStyle.height = `${newHeight}px`;
                     barTwoStyle.height = `${newHeight2}px`;
-                }, i * ANIMATION_SPEED_MS);
+                }, i * this.state.speed);
             }
         }
     }
 
 
-    // testSortingAlgorithms() {
-    //     for (let i = 0; i < 100; i++) { //Simmulations
-    //         const array = [];
-    //         const randomLength = randomIntFromInterval(1,1000);  // Length of the array
-    //         for (let i = 0; i < randomLength; i++) {
-    //             array.push(randomIntFromInterval(-1000,1000));
-    //         }
-    //         const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
-    //         const mergeSortedArray = sortingAlgorithms.mergeSort(array.slice());
-    //         console.log(arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
-    //     }
-    // }
+    changeNumberOfBars = event => {
+        this.setState({
+            numberOfBars: event.target.value
+        })
+
+        this.resetArray(this.state.numberOfBars);
+        let numberOfBars = this.state.numberOfBars;
+
+        if (numberOfBars >= 60) {
+            this.setState({
+                speed: 5
+            })
+        }
+        else if (numberOfBars >= 30){
+            this.setState({
+                speed: 20
+            })
+        }
+        else if (numberOfBars >= 20){
+            this.setState({
+                speed: 100
+            })
+        }
+        else {
+            this.setState({
+                speed: 500
+            })
+        }
+    }
+
 
     render() {
         const {array} = this.state;
@@ -148,15 +189,15 @@ export default class SortingVisualizer extends React.Component {
         return (
             <div className="container">
                 <div className="navbar">
-                    <div className="button new-array" onClick={() => this.resetArray()}>Generate New Array</div>
-                    <div className="button merge-sort" onClick={() => this.mergeSort()}>Merge Sort</div>
-                    <div className="button quick-sort" onClick={() => this.quickSort()}>Quick Sort</div>
-                    <div className="button heap-sort" onClick={() => this.heapSort()}>Heap Sort</div>
-                    <div className="button bubble-sort" onClick={() => this.bubbleSort()}>Bubble Sort</div>
+                    <div id="new-array" className="button new-array" onClick={() => this.resetArray()}>Generate New Array</div>
+                    <div id="merge-sort" className="button merge-sort" onClick={() => this.mergeSort()}>Merge Sort</div>
+                    <div id="quick-sort" className="button quick-sort" onClick={() => this.quickSort()}>Quick Sort</div>
+                    <div id="heap-sort" className="button heap-sort" onClick={() => this.heapSort()}>Heap Sort</div>
+                    <div id="bubble-sort" className="button bubble-sort" onClick={() => this.bubbleSort()}>Bubble Sort</div>
                 </div>
-                {/* <div className="increase_bar">
-                    <input type="range" value="35" min="0" max="100" autocomplete="off" step="1"/>
-                </div> */}
+                
+                <Slider onChange={this.changeNumberOfBars}/>
+
                 <div className="container_array">
                     <div className="array-container">
                         {array.map((value, idx) => (
@@ -171,7 +212,6 @@ export default class SortingVisualizer extends React.Component {
                         ))}
                     </div>
                 </div>
-                {/* <button onClick={() => this.testSortingAlgorithms()}>Test Sorting Algorithms</button> */}
             </div>
         );
     }
@@ -181,11 +221,3 @@ function randomIntFromInterval(min, max) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-// function arraysAreEqual(arrayOne, arrayTwo) {
-//     if (arrayOne.length !== arrayTwo.length) return false;
-//     for (let i = 0; i < arrayOne.length; i++) {
-//         if (arrayOne[i] !== arrayTwo[i]) return false;
-//     }
-//     return true;
-// }
