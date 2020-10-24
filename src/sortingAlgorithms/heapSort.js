@@ -23,7 +23,7 @@ function heapSort(array, n, animations) {
         animations.push([i, 0, "red", "comparing"]);   // Comparing in color red
 
         // Swapping the largest value for the root
-        animations.push([i, array[0], 0, array[i], "red", "swap"]);   // Swapping
+        animations.push([i, 0, array[0], array[i], "red", "swap"]);   // Swapping
         [array[i], array[0]] = [array[0], array[i]];
         
         animations.push([i, 0, "turquoise", "comparing"]);   // Turning back to turquoise
@@ -58,7 +58,7 @@ function heapify(array, n, i, animations) {
     }
 
     if (largest !== i) {
-        animations.push([largest, array[i], i, array[largest], "red", "swap"]);   // Swapping
+        animations.push([largest, i, array[i], array[largest], "red", "swap"]);   // Swapping
         [array[i], array[largest]] = [array[largest], array[i]];
 
         animations.push([largest, i, "turquoise", "comparing"]);   // Turning back to turquoise

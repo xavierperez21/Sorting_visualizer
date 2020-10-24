@@ -43,7 +43,7 @@ function partition(array, start, end, animations) {
                 animations.push([pivotIdx, i, "red", "comparing"]); // Turning into red
                 
                 // Swapping bars
-                animations.push([pivotIdx, array[i], i, array[pivotIdx], "red", "swap"]); // Swapping
+                animations.push([pivotIdx, i, array[i], array[pivotIdx], "red", "swap"]); // Swapping
                 [ array[pivotIdx], array[i] ] = [ array[i], array[pivotIdx] ]
                 
                 // Turning bars in blue again
@@ -60,7 +60,7 @@ function partition(array, start, end, animations) {
 
     // Swapping the pivot
     animations.push([pivotIdx, end, "purple", "comparing"]); // Turning into purple
-    animations.push([pivotIdx, array[end], end, array[pivotIdx], "red", "swap"]); // Swapping
+    animations.push([pivotIdx, end, array[end], array[pivotIdx], "red", "swap"]); // Swapping
     animations.push([pivotIdx, end, "turquoise", "comparing"]); // Turning into turqoise
 
     [ array[pivotIdx], array[end] ] = [ array[end], array[pivotIdx] ];

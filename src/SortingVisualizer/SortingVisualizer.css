@@ -17,31 +17,11 @@
     color: white;
     font-size: 1.2rem;
     transition: 0.4s;
-}
-
-.button:hover {
-    transition: 0.4s;
-    flex: 1.5;
+    background-color: royalblue;
 }
 
 .new-array {
     background-color: rgb(145, 22, 79);
-}
-
-.merge-sort {
-    background-color: royalblue;
-}
-
-.quick-sort {
-    background-color: royalblue;
-}
-
-.heap-sort {
-    background-color: royalblue;
-}
-
-.bubble-sort {
-    background-color: royalblue;
 }
 
 .container_array {

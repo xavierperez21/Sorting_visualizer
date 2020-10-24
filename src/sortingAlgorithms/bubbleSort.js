@@ -26,7 +26,7 @@ function bubbleSort(array, n, animations) {
 
                 // These are the elements and its height that we are going to swap
                 // [first_element, height_first, second_element, height_second]
-                animations.push([j, array[j+1], j+1, array[j], "red", "swap"]);    // Changing height
+                animations.push([j, j+1, array[j+1], array[j], "red", "swap"]);    // Changing height
                 [array[j+1], array[j]] = [array[j], array[j+1]];
             }
             
@@ -34,7 +34,7 @@ function bubbleSort(array, n, animations) {
                 swap = true;
 
                 // We don't swap anything but we have to keep the same consistency in the array animations
-                animations.push([j, array[j], j+1, array[j+1], "red", "swap"]);
+                animations.push([j, j+1, array[j], array[j+1], "red", "swap"]);
             }
 
             // These are the values that we're comparing; we push them a second time to revert their color
