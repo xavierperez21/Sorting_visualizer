@@ -9,8 +9,8 @@ import * as heapSortAlgorithm from '../SortingAlgorithms/heapSort';
 import * as bubbleSortAlgorithm from '../SortingAlgorithms/bubbleSort';
 import './SortingVisualizer.css';
 
-const PRIMARY_COLOR = 'turquoise';
-const PIVOT_COLOR = 'purple';
+const PRIMARY_COLOR = 'turquoise';  // Main color of the bar
+const PIVOT_COLOR = 'purple';       // Color of the "pivot" in quick sort
 
 export default class SortingVisualizer extends React.Component {
     constructor(props) {
@@ -42,10 +42,10 @@ export default class SortingVisualizer extends React.Component {
 
     async mergeSort() {
         let done = false;
-        this.selectingAlgorithm("merge-sort", done);
+        this.selectingAlgorithm("merge-sort", done);    // Blocking all the buttons of the navbar and color in green the selected algorithm
        
         const animations = mergeSortAlgorithm.getMergeSortAnimations(this.state.array);
-        await this.animateSortingAlgorithm(animations);
+        await this.animateSortingAlgorithm(animations);     // Wait until the animations have done
 
         done = true;
         this.selectingAlgorithm("merge-sort", done);
@@ -55,10 +55,10 @@ export default class SortingVisualizer extends React.Component {
 
     async quickSort() {
         let done = false;
-        this.selectingAlgorithm("quick-sort", done);
+        this.selectingAlgorithm("quick-sort", done);    // Blocking all the buttons of the navbar and color in green the selected algorithm
 
         const animations = quickSortAlgorithm.getQuickSortAnimations(this.state.array);
-        await this.animateSortingAlgorithm(animations);
+        await this.animateSortingAlgorithm(animations);     // Wait until the animations have done
 
         done = true;
         this.selectingAlgorithm("quick-sort", done);
@@ -68,10 +68,10 @@ export default class SortingVisualizer extends React.Component {
 
     async heapSort() {
         let done = false;
-        this.selectingAlgorithm("heap-sort", done);
+        this.selectingAlgorithm("heap-sort", done);     // Blocking all the buttons of the navbar and color in green the selected algorithm
         
         const animations = heapSortAlgorithm.getHeapSortAnimations(this.state.array);
-        await this.animateSortingAlgorithm(animations);
+        await this.animateSortingAlgorithm(animations);     // Wait until the animations have done
         
         done = true;
         this.selectingAlgorithm("heap-sort", done);
@@ -81,13 +81,13 @@ export default class SortingVisualizer extends React.Component {
 
     async bubbleSort() {
         let done = false;
-        this.selectingAlgorithm("bubble-sort", done);
+        this.selectingAlgorithm("bubble-sort", done);   // Blocking all the buttons of the navbar and color in green the selected algorithm
         
         const animations = bubbleSortAlgorithm.getBubbleSortAnimations(this.state.array);
-        await this.animateSortingAlgorithm(animations);
+        await this.animateSortingAlgorithm(animations);     // Wait until the animations have done
 
         done = true;
-        this.selectingAlgorithm("bubble-sort", done);
+        this.selectingAlgorithm("bubble-sort", done);   // Unlocking all the buttons of the navbar and color in royalblue the selected algorithm
         console.log("DONE!");
     }
 
@@ -131,13 +131,13 @@ export default class SortingVisualizer extends React.Component {
         
         for (let i = 0; i < animations.length; i++) {
             
-            const barStateIdx = animations[i].length - 1;
+            const barStateIdx = animations[i].length - 1;   // Last position which indicates the state or type of animation
             const barState = animations[i][barStateIdx];
 
-            const barColorIdx = animations[i].length - 2;
+            const barColorIdx = animations[i].length - 2;   // Position which indicates the color of the bars to animate.
             const barColor = animations[i][barColorIdx];
 
-            if (barState === "swap-merge") {
+            if (barState === "swap-merge") {        // The "swap-merge" is an exception of swap animation, because here we are inserting the bar and not swapping it
                 await sleep(this.state.speed);
 
                 const [barOneIdxMerge, newHeightMerge] = animations[i];
@@ -176,6 +176,7 @@ export default class SortingVisualizer extends React.Component {
     }
     
 
+    // Coloring all the bars in green and then in turquoise to indicate the end of the sorting algorithm.
     async finishColor() {
         let arrayBars = document.getElementsByClassName('array-bar');
         for (let i = 0; i < arrayBars.length; i++) {
@@ -184,11 +185,12 @@ export default class SortingVisualizer extends React.Component {
         }
         for (let i = 0; i < arrayBars.length; i++) {
             await sleep(20);
-            arrayBars[i].style.backgroundColor = "turquoise";
+            arrayBars[i].style.backgroundColor = PRIMARY_COLOR;
         }
     }
     
 
+    // Method to change the number of bars when the slider has moved
     changeNumberOfBars = event => {
         this.setState({
             numberOfBars: event.target.value
@@ -226,6 +228,7 @@ export default class SortingVisualizer extends React.Component {
 
         let mediaqueryList = window.matchMedia("(max-width: 768px)");
         
+        // Responsive bars. Change the number of bars depending on the window width
         mediaqueryList.addListener(() => {
             console.log('Ejecutado el listener');
             if (mediaqueryList.matches) {
