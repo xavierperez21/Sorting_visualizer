@@ -19,6 +19,8 @@ export default class SortingVisualizer extends React.Component {
         this.state = {
             array: [],
             numberOfBars: 50,
+            maxBars: 100,
+            maxHeightOfBars: 450,
             speed: 20,
         };
     }
@@ -32,7 +34,7 @@ export default class SortingVisualizer extends React.Component {
     async resetArray(numberOfBars = this.state.numberOfBars) {
         const array = [];
         for (let i = 0; i < numberOfBars; i++) {
-            array.push(randomIntFromInterval(5, 450));
+            array.push(randomIntFromInterval(5, this.state.maxHeightOfBars));
         }
         this.setState({array});
     }
@@ -220,6 +222,29 @@ export default class SortingVisualizer extends React.Component {
 
     render() {
         const {array} = this.state;
+        console.log("Bars: ", this.state.numberOfBars);
+
+        let mediaqueryList = window.matchMedia("(max-width: 768px)");
+        
+        mediaqueryList.addListener(() => {
+            console.log('Ejecutado el listener');
+            if (mediaqueryList.matches) {
+                this.setState({
+                    maxBars: 50,
+                    maxHeightOfBars: 350
+                })
+                this.resetArray();
+                console.log("maxBars: ", this.state.maxBars);
+            }
+            else {
+                this.setState({
+                    maxBars: 100,
+                    maxHeightOfBars: 450
+                })
+                this.resetArray();
+                console.log("maxBars: ", this.state.maxBars);
+            }
+        });
 
         return (
             <div className="container">
@@ -232,7 +257,7 @@ export default class SortingVisualizer extends React.Component {
                     onClickBubbleSort={() => this.bubbleSort()}
                 />
 
-                <Slider onChange={this.changeNumberOfBars}/>
+                <Slider onChange={this.changeNumberOfBars} maxBars={this.state.maxBars}/>
 
                 <div className="container_array">
                     <div className="array-container">
@@ -248,7 +273,7 @@ export default class SortingVisualizer extends React.Component {
                         ))}
                     </div>
                 </div>
-                
+
             </div>
         );
     }

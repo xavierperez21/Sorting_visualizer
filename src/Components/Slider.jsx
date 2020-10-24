@@ -6,7 +6,7 @@ class Slider extends React.Component {
         return(
             <div className="slider_container">
                 <p>Change the number of bars and also the speed</p>
-                <input onChange={this.props.onChange} type="range" min="1" max="100" id="slider" className="slider"/>
+                <input onChange={this.props.onChange} type="range" min="1" max={this.props.maxBars} id="slider" className="slider"/>
             </div>
         );
     }
