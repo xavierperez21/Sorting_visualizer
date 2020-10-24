@@ -1,17 +1,15 @@
 import React from 'react';
 
-import Slider from '../inputRange/Slider.jsx';
+import Slider from '../Components/Slider';
+import Navbar from '../Components/Navbar';
 
-import * as mergeSortAlgorithm from '../sortingAlgorithms/mergeSort';
-import * as quickSortAlgorithm from '../sortingAlgorithms/quickSort';
-import * as heapSortAlgorithm from '../sortingAlgorithms/heapSort';
-import * as bubbleSortAlgorithm from '../sortingAlgorithms/bubbleSort';
+import * as mergeSortAlgorithm from '../SortingAlgorithms/mergeSort';
+import * as quickSortAlgorithm from '../SortingAlgorithms/quickSort';
+import * as heapSortAlgorithm from '../SortingAlgorithms/heapSort';
+import * as bubbleSortAlgorithm from '../SortingAlgorithms/bubbleSort';
 import './SortingVisualizer.css';
 
-// const ANIMATION_SPEED_MS = 50;
-// const NUMBER_OF_ARRAY_BARS = 100;
 const PRIMARY_COLOR = 'turquoise';
-const SECONDARY_COLOR = 'red';
 const PIVOT_COLOR = 'purple';
 
 export default class SortingVisualizer extends React.Component {
@@ -43,37 +41,13 @@ export default class SortingVisualizer extends React.Component {
     async mergeSort() {
         let done = false;
         this.selectingAlgorithm("merge-sort", done);
+       
         const animations = mergeSortAlgorithm.getMergeSortAnimations(this.state.array);
-        const arrayBars = document.getElementsByClassName('array-bar');
+        await this.animateSortingAlgorithm(animations);
 
-        for (let i = 0; i < animations.length; i++) {
-            const isColorChange = i % 3 !== 2;
-            
-            // Change color from turquoise to red and viceversa
-            if (isColorChange) {
-                const [barOneIdx, barTwoIdx] = animations[i];
-                const barOneStyle = arrayBars[barOneIdx].style;
-                const barTwoStyle = arrayBars[barTwoIdx].style;
-                const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
-                
-                await sleep(this.state.speed);
-
-                barOneStyle.backgroundColor = color;
-                barTwoStyle.backgroundColor = color;
-            }
-
-            // Swaping bars
-            else {
-                await sleep(this.state.speed);
-
-                const [barOneIdx, newHeight] = animations[i];
-                const barOneStyle = arrayBars[barOneIdx].style;
-                barOneStyle.height = `${newHeight}px`;
-            }
-        }
-        this.finishColor();
         done = true;
         this.selectingAlgorithm("merge-sort", done);
+        console.log("DONE!");
     }
 
 
@@ -86,7 +60,6 @@ export default class SortingVisualizer extends React.Component {
 
         done = true;
         this.selectingAlgorithm("quick-sort", done);
-
         console.log("DONE!");
     }
 
@@ -152,45 +125,67 @@ export default class SortingVisualizer extends React.Component {
 
 
     async animateSortingAlgorithm(animations) {
-        // let numberOfanimations = 0;
         let arrayBars = document.getElementsByClassName('array-bar');
         
         for (let i = 0; i < animations.length; i++) {
             
             const barStateIdx = animations[i].length - 1;
-            const barColorIdx = animations[i].length - 2;
             const barState = animations[i][barStateIdx];
+
+            const barColorIdx = animations[i].length - 2;
             const barColor = animations[i][barColorIdx];
 
-            const [barOneIdx, barTwoIdx, newHeight, newHeight2] = animations[i];
-            const barOneStyle = arrayBars[barOneIdx].style;
-            const barTwoStyle = arrayBars[barTwoIdx].style;
-
-            if (barState === "traveling") {
+            if (barState === "swap-merge") {
                 await sleep(this.state.speed);
-                
-                barOneStyle.backgroundColor = barColor;
-                barTwoStyle.backgroundColor = PIVOT_COLOR;
-                // numberOfanimations = numberOfanimations + 1;
+
+                const [barOneIdxMerge, newHeightMerge] = animations[i];
+                const barOneStyleMerge = arrayBars[barOneIdxMerge].style;
+                barOneStyleMerge.height = `${newHeightMerge}px`;
             }
 
-            else if (barState === "comparing") {
-                await sleep(this.state.speed);
-
-                barOneStyle.backgroundColor = barColor;
-                barTwoStyle.backgroundColor = barColor;
-            }
-
-            else if (barState === "swap") {
-                await sleep(this.state.speed);
-
-                barOneStyle.height = `${newHeight}px`;
-                barTwoStyle.height = `${newHeight2}px`;
+            else {
+                const [barOneIdx, barTwoIdx, newHeight, newHeight2] = animations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+    
+                if (barState === "traveling") {
+                    await sleep(this.state.speed);
+                    
+                    barOneStyle.backgroundColor = barColor;
+                    barTwoStyle.backgroundColor = PIVOT_COLOR;
+                }
+    
+                else if (barState === "comparing") {
+                    await sleep(this.state.speed);
+    
+                    barOneStyle.backgroundColor = barColor;
+                    barTwoStyle.backgroundColor = barColor;
+                }
+    
+                else if (barState === "swap") {
+                    await sleep(this.state.speed);
+    
+                    barOneStyle.height = `${newHeight}px`;
+                    barTwoStyle.height = `${newHeight2}px`;
+                }
             }
         }
         this.finishColor();
     }
+    
 
+    async finishColor() {
+        let arrayBars = document.getElementsByClassName('array-bar');
+        for (let i = 0; i < arrayBars.length; i++) {
+            await sleep(20);
+            arrayBars[i].style.backgroundColor = "green";
+        }
+        for (let i = 0; i < arrayBars.length; i++) {
+            await sleep(20);
+            arrayBars[i].style.backgroundColor = "turquoise";
+        }
+    }
+    
 
     changeNumberOfBars = event => {
         this.setState({
@@ -223,32 +218,20 @@ export default class SortingVisualizer extends React.Component {
     }
 
 
-    async finishColor() {
-        let arrayBars = document.getElementsByClassName('array-bar');
-        for (let i = 0; i < arrayBars.length; i++) {
-            await sleep(20);
-            arrayBars[i].style.backgroundColor = "green";
-        }
-        for (let i = 0; i < arrayBars.length; i++) {
-            await sleep(20);
-            arrayBars[i].style.backgroundColor = "turquoise";
-        }
-    }
-
-
     render() {
         const {array} = this.state;
 
         return (
             <div className="container">
-                <div className="navbar">
-                    <div id="new-array" className="button new-array" onClick={() => this.resetArray()}>Generate New Array</div>
-                    <div id="merge-sort" className="button merge-sort" onClick={() => this.mergeSort()}>Merge Sort</div>
-                    <div id="quick-sort" className="button quick-sort" onClick={() => this.quickSort()}>Quick Sort</div>
-                    <div id="heap-sort" className="button heap-sort" onClick={() => this.heapSort()}>Heap Sort</div>
-                    <div id="bubble-sort" className="button bubble-sort" onClick={() => this.bubbleSort()}>Bubble Sort</div>
-                </div>
                 
+                <Navbar
+                    onClickNew={() => this.resetArray()}
+                    onClickMergeSort={() => this.mergeSort()}
+                    onClickQuickSort={() => this.quickSort()}
+                    onClickHeapSort={() => this.heapSort()}
+                    onClickBubbleSort={() => this.bubbleSort()}
+                />
+
                 <Slider onChange={this.changeNumberOfBars}/>
 
                 <div className="container_array">
@@ -265,6 +248,7 @@ export default class SortingVisualizer extends React.Component {
                         ))}
                     </div>
                 </div>
+                
             </div>
         );
     }
