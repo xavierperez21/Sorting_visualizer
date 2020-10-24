@@ -49,7 +49,6 @@ export default class SortingVisualizer extends React.Component {
 
         done = true;
         this.selectingAlgorithm("merge-sort", done);
-        console.log("DONE!");
     }
 
 
@@ -62,7 +61,6 @@ export default class SortingVisualizer extends React.Component {
 
         done = true;
         this.selectingAlgorithm("quick-sort", done);
-        console.log("DONE!");
     }
 
 
@@ -75,7 +73,6 @@ export default class SortingVisualizer extends React.Component {
         
         done = true;
         this.selectingAlgorithm("heap-sort", done);
-        console.log("DONE!");
     }
 
 
@@ -88,7 +85,6 @@ export default class SortingVisualizer extends React.Component {
 
         done = true;
         this.selectingAlgorithm("bubble-sort", done);   // Unlocking all the buttons of the navbar and color in royalblue the selected algorithm
-        console.log("DONE!");
     }
 
 
@@ -224,20 +220,17 @@ export default class SortingVisualizer extends React.Component {
 
     render() {
         const {array} = this.state;
-        console.log("Bars: ", this.state.numberOfBars);
 
         let mediaqueryList = window.matchMedia("(max-width: 768px)");
         
         // Responsive bars. Change the number of bars depending on the window width
         mediaqueryList.addListener(() => {
-            console.log('Ejecutado el listener');
             if (mediaqueryList.matches) {
                 this.setState({
                     maxBars: 50,
                     maxHeightOfBars: 350
                 })
                 this.resetArray();
-                console.log("maxBars: ", this.state.maxBars);
             }
             else {
                 this.setState({
@@ -245,7 +238,6 @@ export default class SortingVisualizer extends React.Component {
                     maxHeightOfBars: 450
                 })
                 this.resetArray();
-                console.log("maxBars: ", this.state.maxBars);
             }
         });
 
