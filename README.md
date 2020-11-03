@@ -3,4 +3,10 @@ A visual project to see the 4 main sorting algorithms (merge-sort, heap-sort, qu
 
 ![](https://i.imgur.com/F3VthR8.png)
 
+## Technologies:
+- React.js
+- JavaScript
+- HTML
+- CSS
+
 Enjoy! :)
